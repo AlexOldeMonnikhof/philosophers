@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:44:22 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/12 16:57:52 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/15 16:56:47 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,5 @@ int main(int argc, char **argv)
 
 	ft_check(argc, argv);
 	ft_parse(&data, argc, argv);
-	ft_threads(&data, argc);
+	ft_threads(&data);
 }

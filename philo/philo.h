@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:48:35 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/12 18:42:36 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/15 17:00:09 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ typedef struct philo{
 	pthread_mutex_t	*r_fork;
 }					t_philo;
 
-void	parse_atoi(t_data *data, int argc, char **argv);
+void	parse_data(t_data *data, int argc, char **argv);
 void	parse_correct_arguments(t_data *data, int ms, int i);
 void	ft_parse(t_data *data, int argc, char **argv);
+void	parse_philo(t_data *data);
+void	parse_mutex(data->philo);
 
 void	ft_check(int argc, char **argv);
 void	check_argv(char **argv);
@@ -53,5 +55,8 @@ void	ft_error(char *msg);
 void	ft_errno(char *msg);
 
 int		ft_atoi_data(const char *str);
+
+void	ft_create_threads(t_data *data);
+void	ft_threads(t_data *data);
 
 #endif
