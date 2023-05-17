@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:58:48 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/15 17:00:18 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:26:27 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,39 +47,46 @@ void	parse_data(t_data *data, int argc, char **argv)
 
 void	parse_philo(t_data *data)
 {
-	int	i;
+	int		i;
+	t_philo	*philo;
 
 	i = 0;
-	data->philo = malloc(sizeof(t_philo));
+	data->philo = malloc(sizeof(t_philo) * data->no_of_philosophers);
 	if (!data->philo)
 		ft_errno("malloc error");
-	data->philo->philo_no = malloc(data->no_of_philosophers * sizeof(int));
-	if (!data->philo->philo_no)
-		ft_errno("malloc error");
+	philo = data->philo;
 	while (i < data->no_of_philosophers)
 	{
-		data->philo->philo_no[i] = i + 1;
+		philo[i].philo_no = i + 1;
+		philo[i].th = malloc(sizeof(pthread_t));
+		philo[i].l_fork = malloc(sizeof(pthread_mutex_t));
+		philo[i].r_fork = malloc(sizeof(pthread_mutex_t));
+		if (!philo[i].th || !philo[i].l_fork || !philo[i].r_fork)
+			ft_errno("malloc error");
 		i++;
 	}
-	data->philo->th = malloc(data->no_of_philosophers * sizeof(pthread_t));
-	if (!data->philo->th)
-		ft_errno("malloc error");
-	data->philo->l_fork = malloc(data->no_of_philosophers * sizeof(pthread_mutex_t));
-	if (!data->philo->l_fork)
-		ft_errno("malloc error");
-	data->philo->r_fork = malloc(data->no_of_philosophers * sizeof(pthread_mutex_t));
-	if (!data->philo->r_fork)
-		ft_errno("malloc error");
 }
 
-void	parse_mutex(t_dphilo)
+void	parse_mutex(t_data *data)
 {
+	int		i;
+	t_philo	*philo;
 
+	i = 0;
+	philo = data->philo;
+	while (i < data->no_of_philosophers)
+	{
+		if (pthread_mutex_init(philo[i].l_fork, NULL)
+			|| pthread_mutex_init(philo[i].r_fork, NULL))
+			ft_errno("mutex fail");
+		printf("%d ",i);
+		i++;
+	}
 }
 
 void	ft_parse(t_data *data, int argc, char **argv)
 {
 	parse_data(data, argc, argv);
 	parse_philo(data);
-	parse_threads(data->philo);
+	parse_mutex(data);
 }

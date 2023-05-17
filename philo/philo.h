@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:48:35 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/15 17:00:09 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:13:43 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@
 # include <limits.h>
 # include <stdbool.h>
 
-typedef struct data t_data;
-typedef struct philo t_philo;
+typedef struct philo	t_philo;
 
 typedef struct data{
 	int		no_of_philosophers;
@@ -35,7 +34,7 @@ typedef struct data{
 }			t_data;
 
 typedef struct philo{
-	int				*philo_no;
+	int				philo_no;
 	t_data			*data;
 	pthread_t		*th;
 	pthread_mutex_t	*l_fork;
@@ -46,7 +45,7 @@ void	parse_data(t_data *data, int argc, char **argv);
 void	parse_correct_arguments(t_data *data, int ms, int i);
 void	ft_parse(t_data *data, int argc, char **argv);
 void	parse_philo(t_data *data);
-void	parse_mutex(data->philo);
+void	parse_mutex(t_data *data);
 
 void	ft_check(int argc, char **argv);
 void	check_argv(char **argv);
@@ -58,5 +57,10 @@ int		ft_atoi_data(const char *str);
 
 void	ft_create_threads(t_data *data);
 void	ft_threads(t_data *data);
+
+//ROUTINE
+void	philo_eat(t_philo *philo);
+void	philo_think(void);
+void	philo_sleep(void);
 
 #endif

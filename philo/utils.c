@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 13:22:26 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/15 16:56:58 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:13:56 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_atoi_data(const char *str)
 {
-	int	i;
+	int			i;
 	long long	out;
 
 	i = 0;

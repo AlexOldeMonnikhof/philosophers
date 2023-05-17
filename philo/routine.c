@@ -1,22 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/01 12:44:22 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/17 20:13:07 by aolde-mo         ###   ########.fr       */
+/*   Created: 2023/05/17 14:40:08 by aolde-mo          #+#    #+#             */
+/*   Updated: 2023/05/17 20:22:23 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+void	philo_eat(t_philo *philo)
 {
-	t_data	data;
+	pthread_mutex_lock(philo->l_fork);
+	printf("l taken by %d\n", philo->philo_no);
+	sleep(1);
+	pthread_mutex_lock(philo->r_fork);
+	printf("r taken by %d\n", philo->philo_no);
+	sleep(1);
+}
 
-	ft_check(argc, argv);
-	ft_parse(&data, argc, argv);
-	ft_threads(&data);
+void	philo_think(void)
+{
+	
+}
+
+void	philo_sleep(void)
+{
+	
 }
