@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:58:48 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/17 20:26:27 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/18 16:28:48 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,16 @@ void	parse_philo(t_data *data)
 		philo[i].r_fork = malloc(sizeof(pthread_mutex_t));
 		if (!philo[i].th || !philo[i].l_fork || !philo[i].r_fork)
 			ft_errno("malloc error");
+		if (pthread_mutex_init(philo[i].l_fork, NULL)
+			|| pthread_mutex_init(philo[i].r_fork, NULL))
+		ft_errno("mutex fail");
 		i++;
 	}
+	// philo->l_fork = malloc(sizeof(pthread_mutex_t));
+	// philo->r_fork = malloc(sizeof(pthread_mutex_t));
+	// if (pthread_mutex_init(philo->l_fork, NULL)
+	// 	|| pthread_mutex_init(philo->r_fork, NULL))
+	// if (pthread_mutex_init(philo->l_fork, NULL))
 }
 
 void	parse_mutex(t_data *data)
@@ -74,19 +82,18 @@ void	parse_mutex(t_data *data)
 
 	i = 0;
 	philo = data->philo;
-	while (i < data->no_of_philosophers)
-	{
-		if (pthread_mutex_init(philo[i].l_fork, NULL)
-			|| pthread_mutex_init(philo[i].r_fork, NULL))
-			ft_errno("mutex fail");
-		printf("%d ",i);
-		i++;
-	}
+	// while (i < data->no_of_philosophers)
+	// {
+	// 	// pthread_mutex_init(philo[i].l_fork, NULL);
+	// 	// pthread_mutex_init(philo[i].r_fork, NULL);
+	// 	printf("%d ",i);
+	// 	i++;
+	// }
 }
 
 void	ft_parse(t_data *data, int argc, char **argv)
 {
 	parse_data(data, argc, argv);
 	parse_philo(data);
-	parse_mutex(data);
+	// parse_mutex(data);
 }
