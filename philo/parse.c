@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:58:48 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/18 16:28:48 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/22 17:41:11 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,57 +43,53 @@ void	parse_data(t_data *data, int argc, char **argv)
 		parse_correct_arguments(data, ms, i);
 		i++;
 	}
+	data->tv = malloc(sizeof(struct timeval));
+	gettimeofday(data->tv, NULL);
+	data->start_time = data->tv->tv_sec * 1000 + data->tv->tv_usec / 1000;
 }
 
 void	parse_philo(t_data *data)
 {
-	int		i;
-	t_philo	*philo;
+	int	i;
+	int	no;
 
 	i = 0;
-	data->philo = malloc(sizeof(t_philo) * data->no_of_philosophers);
-	if (!data->philo)
-		ft_errno("malloc error");
-	philo = data->philo;
-	while (i < data->no_of_philosophers)
+	no = data->no_of_philosophers;
+	data->th = malloc(no * sizeof(pthread_t));
+	data->philo = malloc(no * sizeof(t_philo));
+	if (!data->th || !data->philo)
+		exit(EXIT_FAILURE);
+	while (i < no)
 	{
-		philo[i].philo_no = i + 1;
-		philo[i].th = malloc(sizeof(pthread_t));
-		philo[i].l_fork = malloc(sizeof(pthread_mutex_t));
-		philo[i].r_fork = malloc(sizeof(pthread_mutex_t));
-		if (!philo[i].th || !philo[i].l_fork || !philo[i].r_fork)
-			ft_errno("malloc error");
-		if (pthread_mutex_init(philo[i].l_fork, NULL)
-			|| pthread_mutex_init(philo[i].r_fork, NULL))
-		ft_errno("mutex fail");
+		data->philo[i].philo_no = i + 1;
+		data->philo[i].fork = malloc(sizeof(pthread_mutex_t));
+		data->philo[i].data = data;
+		if (!data->philo[i].fork || pthread_mutex_init(data->philo[i].fork, NULL))
+			exit(EXIT_FAILURE);
 		i++;
 	}
-	// philo->l_fork = malloc(sizeof(pthread_mutex_t));
-	// philo->r_fork = malloc(sizeof(pthread_mutex_t));
-	// if (pthread_mutex_init(philo->l_fork, NULL)
-	// 	|| pthread_mutex_init(philo->r_fork, NULL))
-	// if (pthread_mutex_init(philo->l_fork, NULL))
 }
 
 void	parse_mutex(t_data *data)
 {
 	int		i;
+	int		no;
 	t_philo	*philo;
 
 	i = 0;
+	no = data->no_of_philosophers;
 	philo = data->philo;
-	// while (i < data->no_of_philosophers)
-	// {
-	// 	// pthread_mutex_init(philo[i].l_fork, NULL);
-	// 	// pthread_mutex_init(philo[i].r_fork, NULL);
-	// 	printf("%d ",i);
-	// 	i++;
-	// }
+	while (i < no)
+	{
+		philo[i].l_fork = philo[i].fork;
+		philo[i].r_fork = philo[(i + 1) % no].fork;
+		i++;
+	}
 }
 
 void	ft_parse(t_data *data, int argc, char **argv)
 {
 	parse_data(data, argc, argv);
 	parse_philo(data);
-	// parse_mutex(data);
+	parse_mutex(data);
 }
