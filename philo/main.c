@@ -6,17 +6,23 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:44:22 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/17 20:13:07 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/23 19:39:10 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	ft_leaks()
+{
+	system("leaks -s philo");
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	ft_check(argc, argv);
+	atexit(ft_leaks);
+	arg_check(argc, argv);
 	ft_parse(&data, argc, argv);
-	ft_threads(&data);
+	create_and_join_threads(&data);
 }
