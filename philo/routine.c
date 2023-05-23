@@ -21,13 +21,20 @@ void	*cycles(void *param)
 		usleep(100);
 	while (!false)
 	{
-		philo_eat_and_sleep(philo);
+		if (philo_eat(philo))
+		{
+			pthread_mutex_unlock(philo->l_fork);
+			pthread_mutex_unlock(philo->r_fork);
+			philo_think(philo);
+			break ;
+		}
+		philo_sleep(philo);
 		philo_think(philo);
 	}
 	return (NULL);
 }
 
-void	philo_eat_and_sleep(t_philo *philo)
+int	philo_eat(t_philo *philo)
 {
 	long long	time;
 
@@ -40,11 +47,21 @@ void	philo_eat_and_sleep(t_philo *philo)
 	philo->is_eating = true;
 	printf("%lld %d is eating\n", time, philo->philo_no);
 	acc_usleep(philo->data, philo->data->time_to_eat);
-	time = get_time(philo->data);
-	printf("%lld %d is sleeping\n", time, philo->philo_no);
+	philo->times_eaten++;
+	if (philo->times_eaten == philo->data->times_philo_must_eat)
+		return (1);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
 	philo->is_eating = false;
+	return (0);
+}
+
+void	philo_sleep(t_philo *philo)
+{
+	long long	time;
+
+	time = get_time(philo->data);
+	printf("%lld %d is sleeping\n", time, philo->philo_no);
 	acc_usleep(philo->data, philo->data->time_to_sleep);
 }
 
