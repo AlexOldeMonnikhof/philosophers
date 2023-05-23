@@ -30,7 +30,7 @@ typedef struct data{
 	unsigned int	time_to_die;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
-	unsigned int	no_of_times_each_philosopher_must_eat;
+	unsigned int	times_philo_must_eat;
 	long long		start_time;
 	struct timeval	tv;
 	pthread_t		*th;
@@ -39,17 +39,13 @@ typedef struct data{
 
 typedef struct philo{
 	int				philo_no;
+	unsigned int	times_eaten;
+	bool			is_eating;
 	t_data			*data;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
-	bool			is_eating;
 }					t_philo;
-
-// typedef struct forks{
-// 	pthread_mutex_t	*l_fork;
-// 	pthread_mutex_t	*r_fork;
-// }					t_forks;
 
 void		parse_data(t_data *data, int argc, char **argv);
 void		parse_correct_arguments(t_data *data, int ms, int i);
@@ -69,7 +65,8 @@ void		create_and_join_threads(t_data *data);
 
 //ROUTINE
 void		*cycles(void *param);
-void		philo_eat_and_sleep(t_philo *philo);
+int			philo_eat(t_philo *philo);
+void		philo_sleep(t_philo *philo);
 void		philo_think(t_philo *philo);
 
 //TIME
