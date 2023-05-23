@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:58:48 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/22 17:41:11 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/23 19:36:35 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ void	parse_data(t_data *data, int argc, char **argv)
 		parse_correct_arguments(data, ms, i);
 		i++;
 	}
-	data->tv = malloc(sizeof(struct timeval));
-	gettimeofday(data->tv, NULL);
-	data->start_time = data->tv->tv_sec * 1000 + data->tv->tv_usec / 1000;
+	gettimeofday(&data->tv, NULL);
+	data->start_time = data->tv.tv_sec * 1000LL + data->tv.tv_usec / 1000LL;
 }
 
 void	parse_philo(t_data *data)
@@ -62,9 +61,11 @@ void	parse_philo(t_data *data)
 	while (i < no)
 	{
 		data->philo[i].philo_no = i + 1;
+		data->philo[i].is_eating = false;
 		data->philo[i].fork = malloc(sizeof(pthread_mutex_t));
 		data->philo[i].data = data;
-		if (!data->philo[i].fork || pthread_mutex_init(data->philo[i].fork, NULL))
+		if (!data->philo[i].fork \
+			|| pthread_mutex_init(data->philo[i].fork, NULL))
 			exit(EXIT_FAILURE);
 		i++;
 	}
@@ -74,15 +75,13 @@ void	parse_mutex(t_data *data)
 {
 	int		i;
 	int		no;
-	t_philo	*philo;
 
 	i = 0;
 	no = data->no_of_philosophers;
-	philo = data->philo;
 	while (i < no)
 	{
-		philo[i].l_fork = philo[i].fork;
-		philo[i].r_fork = philo[(i + 1) % no].fork;
+		data->philo[i].l_fork = data->philo[i].fork;
+		data->philo[i].r_fork = data->philo[(i + 1) % no].fork;
 		i++;
 	}
 }
