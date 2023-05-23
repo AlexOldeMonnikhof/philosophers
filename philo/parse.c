@@ -12,21 +12,21 @@
 
 #include "philo.h"
 
-void	parse_correct_arguments(t_data *data, int ms, int i)
+void	parse_correct_arguments(t_data *data, int ms_or_no, int i)
 {
 	if (i == 1)
-		data->no_of_philosophers = ms;
+		data->no_of_philosophers = ms_or_no;
 	else if (i == 2)
-		data->time_to_die = ms;
+		data->time_to_die = ms_or_no;
 	else if (i == 3)
-		data->time_to_eat = ms;
+		data->time_to_eat = ms_or_no;
 	else if (i == 4)
 	{
-		data->time_to_sleep = ms;
-		data->no_of_times_each_philosopher_must_eat = 0;
+		data->time_to_sleep = ms_or_no;
+		data->times_philo_must_eat = 0;
 	}
 	else
-		data->no_of_times_each_philosopher_must_eat = ms;
+		data->times_philo_must_eat = ms_or_no;
 }
 
 void	parse_data(t_data *data, int argc, char **argv)
@@ -49,23 +49,26 @@ void	parse_data(t_data *data, int argc, char **argv)
 
 void	parse_philo(t_data *data)
 {
-	int	i;
-	int	no;
+	t_philo	*philo;
+	int		i;
+	int		no;
 
 	i = 0;
 	no = data->no_of_philosophers;
 	data->th = malloc(no * sizeof(pthread_t));
 	data->philo = malloc(no * sizeof(t_philo));
-	if (!data->th || !data->philo)
+	philo = data->philo;
+	if (!data->th || !philo)
 		exit(EXIT_FAILURE);
 	while (i < no)
 	{
-		data->philo[i].philo_no = i + 1;
-		data->philo[i].is_eating = false;
-		data->philo[i].fork = malloc(sizeof(pthread_mutex_t));
-		data->philo[i].data = data;
-		if (!data->philo[i].fork \
-			|| pthread_mutex_init(data->philo[i].fork, NULL))
+		philo[i].philo_no = i + 1;
+		philo[i].times_eaten = 0;
+		philo[i].is_eating = false;
+		philo[i].data = data;
+		philo[i].fork = malloc(sizeof(pthread_mutex_t));
+		if (!philo[i].fork \
+			|| pthread_mutex_init(philo[i].fork, NULL))
 			exit(EXIT_FAILURE);
 		i++;
 	}
