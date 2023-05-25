@@ -24,6 +24,7 @@
 
 typedef struct philo	t_philo;
 typedef struct forks	t_forks;
+typedef struct status	t_status;
 
 typedef struct data{
 	unsigned int	no_of_philosophers;
@@ -35,10 +36,12 @@ typedef struct data{
 	struct timeval	tv;
 	pthread_t		*th;
 	t_philo			*philo;
+	t_status		*status;
 }			t_data;
 
 typedef struct philo{
 	int				philo_no;
+	long long		last_time_eaten;
 	unsigned int	times_eaten;
 	bool			is_eating;
 	t_data			*data;
@@ -47,25 +50,35 @@ typedef struct philo{
 	pthread_mutex_t	*r_fork;
 }					t_philo;
 
-void		parse_data(t_data *data, int argc, char **argv);
+typedef struct status{
+	unsigned int	has_eaten_enough;
+	bool			all_ate;
+	bool			someone_died;
+}			t_status;
+
+
+void		parse_data(t_data *data, char **argv);
 void		parse_correct_arguments(t_data *data, int ms, int i);
-void		ft_parse(t_data *data, int argc, char **argv);
+void		ft_parse(t_data *data, char **argv);
 void		parse_philo(t_data *data);
 void		parse_mutex(t_data *data);
 
 void		arg_check(int argc, char **argv);
+// void		check_status(t_data *data);
 void		check_argv(char **argv);
 
 void		ft_error(char *msg);
 void		ft_errno(char *msg);
 
 int			ft_atoi_data(const char *str);
+void		cleanup(t_data *data);
 
 void		create_and_join_threads(t_data *data);
 
 //ROUTINE
 void		*cycles(void *param);
 int			philo_eat(t_philo *philo);
+void		unlock_mutexes(t_philo *philo);
 void		philo_sleep(t_philo *philo);
 void		philo_think(t_philo *philo);
 
