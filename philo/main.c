@@ -14,15 +14,16 @@
 
 void	ft_leaks()
 {
-	system("leaks -s philo");
+	// system("leaks -s philo");
 }
 
 int	main(int argc, char **argv)
 {
-	t_data	data;
-
-	atexit(ft_leaks);
+	t_data		data;
+	
 	arg_check(argc, argv);
-	ft_parse(&data, argc, argv);
+	ft_parse(&data, argv);
 	create_and_join_threads(&data);
+	cleanup(&data);
+	atexit(ft_leaks);
 }
