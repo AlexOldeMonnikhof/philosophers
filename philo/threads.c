@@ -14,8 +14,8 @@
 
 void	create_and_join_threads(t_data *data)
 {
-	int		i;
-	t_philo	*philo;
+	unsigned int	i;
+	t_philo			*philo;
 
 	i = 0;
 	philo = data->philo;
