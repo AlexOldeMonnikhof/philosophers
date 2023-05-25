@@ -29,7 +29,7 @@ void	parse_correct_arguments(t_data *data, int ms_or_no, int i)
 		data->times_philo_must_eat = ms_or_no;
 }
 
-void	parse_data(t_data *data, int argc, char **argv)
+void	parse_data(t_data *data, char **argv)
 {
 	int	i;
 	int	ms;
@@ -43,6 +43,11 @@ void	parse_data(t_data *data, int argc, char **argv)
 		parse_correct_arguments(data, ms, i);
 		i++;
 	}
+	data->status = malloc(sizeof(t_status));
+	// PROTECT!!!
+	data->status->has_eaten_enough = 0;
+	data->status->all_ate = false;
+	data->status->someone_died = false;
 	gettimeofday(&data->tv, NULL);
 	data->start_time = data->tv.tv_sec * 1000LL + data->tv.tv_usec / 1000LL;
 }
@@ -63,6 +68,7 @@ void	parse_philo(t_data *data)
 	while (i < no)
 	{
 		philo[i].philo_no = i + 1;
+		philo[i].last_time_eaten = 0;
 		philo[i].times_eaten = 0;
 		philo[i].is_eating = false;
 		philo[i].data = data;
@@ -89,9 +95,9 @@ void	parse_mutex(t_data *data)
 	}
 }
 
-void	ft_parse(t_data *data, int argc, char **argv)
+void	ft_parse(t_data *data, char **argv)
 {
-	parse_data(data, argc, argv);
+	parse_data(data, argv);
 	parse_philo(data);
 	parse_mutex(data);
 }
