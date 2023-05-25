@@ -1,7 +1,7 @@
 NAME = philo
 FLAGS =
-# FLAGS = -Wall -Werror -Wextra
-SRCS = main.c parse.c checks.c error.c utils.c threads.c routine.c time.c
+FLAGS = -Wall -Werror -Wextra
+SRCS = main.c parse.c checks.c error.c utils.c threads.c routine.c time.c cleanup.c
 OBJS	= $(addprefix obj/, ${SRCS:.c=.o})
 CC		=	gcc
 
