@@ -6,21 +6,22 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 13:06:31 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/23 19:35:28 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/26 18:43:35 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	arg_check(int argc, char **argv)
+int	arg_check(int argc, char **argv)
 {
 	if (argc != 5 && argc != 6)
-		ft_error("invalid number of arguments");
+		return (1);
 	if (!argv[1][0] || !argv[2][0] || !argv[3][0] || !argv[4][0])
-		ft_error("empty argument(s)");
+		return (1);
 	if (argc == 6)
 	{
 		if (!argv[5][0])
-			ft_error("empty argument(s)");
+			return (1);
 	}
+	return (0);
 }
