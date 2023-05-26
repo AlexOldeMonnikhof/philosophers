@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:48:35 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/23 19:39:43 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/26 19:08:22 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,24 +56,24 @@ typedef struct status{
 	bool			someone_died;
 }			t_status;
 
+//MAIN
+int			main(int argc, char **argv);
 
-void		parse_data(t_data *data, char **argv);
+//CHECK
+int			arg_check(int argc, char **argv);
+
+//PARSE
+int			parse_all(t_data *data, char **argv);
+int			parse_data(t_data *data, char **argv);
 void		parse_correct_arguments(t_data *data, int ms, int i);
-void		ft_parse(t_data *data, char **argv);
-void		parse_philo(t_data *data);
+int			parse_philo(t_data *data);
 void		parse_mutex(t_data *data);
 
-void		arg_check(int argc, char **argv);
-// void		check_status(t_data *data);
-void		check_argv(char **argv);
-
-void		ft_error(char *msg);
-void		ft_errno(char *msg);
-
+//UTILS
 int			ft_atoi_data(const char *str);
-void		cleanup(t_data *data);
 
-void		create_and_join_threads(t_data *data);
+//THREADS
+int			create_and_join_threads(t_data *data);
 
 //ROUTINE
 void		*cycles(void *param);
@@ -85,6 +85,10 @@ void		philo_think(t_philo *philo);
 //TIME
 long long	get_time(t_data *data);
 void		acc_usleep(t_data *data, long long ms);
+
+//CLEANUP
+void		free_specific(t_data *data, int err);
+void		cleanup(t_data *data);
 
 #endif
 
