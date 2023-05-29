@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:48:35 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/26 19:08:22 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/29 20:06:08 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct data{
 	unsigned int	times_philo_must_eat;
 	long long		start_time;
 	struct timeval	tv;
+	pthread_mutex_t	writing;
 	pthread_t		*th;
 	t_philo			*philo;
 	t_status		*status;
@@ -67,13 +68,15 @@ int			parse_all(t_data *data, char **argv);
 int			parse_data(t_data *data, char **argv);
 void		parse_correct_arguments(t_data *data, int ms, int i);
 int			parse_philo(t_data *data);
-void		parse_mutex(t_data *data);
+void		connect_forks(t_data *data);
 
 //UTILS
 int			ft_atoi_data(const char *str);
+void		print_msg(t_philo *philo, long long ms, char *msg, bool died);
 
 //THREADS
 int			create_and_join_threads(t_data *data);
+int			one_philo_thread(t_data *data);
 
 //ROUTINE
 void		*cycles(void *param);
@@ -83,12 +86,19 @@ void		philo_sleep(t_philo *philo);
 void		philo_think(t_philo *philo);
 
 //TIME
+void		set_start_time(t_data *data);
 long long	get_time(t_data *data);
 void		acc_usleep(t_data *data, long long ms);
 
 //CLEANUP
-void		free_specific(t_data *data, int err);
+int			free_specific(t_data *data, int err);
 void		cleanup(t_data *data);
+
+//ONE PHILO
+void		*one_philo_cycle(void *param);
+int			one_philo_eat(t_philo *philo);
+void		one_philo_sleep(t_philo *philo);
+void		one_philo_think(t_philo *philo);
 
 #endif
 
