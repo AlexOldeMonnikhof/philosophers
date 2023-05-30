@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:48:35 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/29 20:06:08 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/30 16:29:55 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ typedef struct data{
 	long long		start_time;
 	struct timeval	tv;
 	pthread_mutex_t	writing;
+	pthread_mutex_t	check_if_can_eat;
+	pthread_mutex_t	check_eat_count;
 	pthread_t		*th;
 	t_philo			*philo;
 	t_status		*status;
@@ -43,6 +45,7 @@ typedef struct data{
 typedef struct philo{
 	int				philo_no;
 	long long		last_time_eaten;
+	long long		start;
 	unsigned int	times_eaten;
 	bool			is_eating;
 	t_data			*data;

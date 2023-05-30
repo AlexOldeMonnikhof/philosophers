@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:44:22 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/29 19:31:20 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:49:20 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (parse_all(&data, argv))
+	{
+		printf("invalid argument(s) or malloc error\n");
 		return (1);
+	}
 	if (create_and_join_threads(&data))
 	{
 		printf("error while creating or joining thread(s)\n");

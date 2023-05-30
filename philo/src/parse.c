@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:58:48 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/29 19:37:20 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/05/30 18:44:57 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,16 @@ int	parse_data(t_data *data, char **argv)
 	{
 		ms = ft_atoi_data(argv[i]);
 		if (ms <= 0)
-		{
-			printf("arguments must be > 0 and < int_max\n");
 			return (1);
-		}
 		parse_correct_arguments(data, ms, i);
 		i++;
 	}
+	if (pthread_mutex_init(&data->check_if_can_eat, NULL)
+		|| pthread_mutex_init(&data->check_eat_count, NULL))
+		return (1);
 	data->status = malloc(sizeof(t_status));
 	if (!data->status)
-	{
-		printf("malloc error");
 		return (1);
-	}
 	data->status->has_eaten_enough = 0;
 	data->status->all_ate = false;
 	data->status->someone_died = false;
