@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 15:05:27 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/30 15:28:01 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/06 13:35:59 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,9 @@ long long	get_time(t_data *data)
 
 void	acc_usleep(t_data *data, long long ms)
 {
-	long long	current_time;
 	long long	placeholder;
 
-	current_time = get_time(data);
-	placeholder = current_time;
-	while (current_time < placeholder + ms)
-	{
-		current_time = get_time(data);
-		usleep(10);
-	}
+	placeholder = get_time(data);
+	while (get_time(data) < placeholder + ms)
+		usleep(300);
 }

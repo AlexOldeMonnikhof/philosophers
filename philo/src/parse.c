@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:58:48 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/30 18:44:57 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:52:09 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,12 @@ int	parse_data(t_data *data, char **argv)
 		parse_correct_arguments(data, ms, i);
 		i++;
 	}
-	if (pthread_mutex_init(&data->check_if_can_eat, NULL)
-		|| pthread_mutex_init(&data->check_eat_count, NULL))
-		return (1);
-	data->status = malloc(sizeof(t_status));
-	if (!data->status)
-		return (1);
-	data->status->has_eaten_enough = 0;
-	data->status->all_ate = false;
-	data->status->someone_died = false;
+	pthread_mutex_init(&data->writing, NULL);
+	pthread_mutex_init(&data->check_eat_count, NULL);
+	pthread_mutex_init(&data->die_mutex, NULL);
+	pthread_mutex_init(&data->all_ate_mutex, NULL);
+	data->someone_died = false;
+	data->all_ate = false;
 	return (0);
 }
 
@@ -71,30 +68,29 @@ int	parse_philo(t_data *data)
 		data->philo[i].philo_no = i + 1;
 		data->philo[i].last_time_eaten = 0;
 		data->philo[i].times_eaten = 0;
-		data->philo[i].is_eating = false;
 		data->philo[i].data = data;
-		data->philo[i].fork = malloc(sizeof(pthread_mutex_t));
-		if (!data->philo[i].fork \
-			|| pthread_mutex_init(data->philo[i].fork, NULL))
-			return (2 + i);
 		i++;
 	}
 	return (0);
 }
 
-void	connect_forks(t_data *data)
+void	parse_forks(t_data *data)
 {
-	int		i;
-	int		no;
+	int	i;
+	int	no;
 
 	i = 0;
 	no = data->no_of_philosophers;
+	data->forks = malloc(sizeof(pthread_mutex_t) * no);
+	if (!data->forks)
+		return ;
 	if (no == 1)
 		return ;
 	while (i < no)
 	{
-		data->philo[i].l_fork = data->philo[i].fork;
-		data->philo[i].r_fork = data->philo[(i + 1) % no].fork;
+		pthread_mutex_init(&data->forks[i], NULL);
+		data->philo[i].l_fork = &data->forks[i];
+		data->philo[i].r_fork = &data->forks[(i + 1) % no];
 		i++;
 	}
 }
@@ -108,6 +104,6 @@ int	parse_all(t_data *data, char **argv)
 	error = parse_philo(data);
 	if (error)
 		return (free_specific(data, error));
-	connect_forks(data);
+	parse_forks(data);
 	return (0);
 }
