@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:35:56 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/06 17:54:49 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/07 15:24:44 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	create_and_join_threads(t_data *data)
 		i++;
 	}
 	i = 0;
-	if (data->no_of_philosophers != 0)
+	if (data->times_philo_must_eat > 0)
 		monitoring(data);
 	while (i < data->no_of_philosophers)
 	{

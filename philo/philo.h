@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:48:35 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/05/30 16:29:55 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/07 16:27:38 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 
 typedef struct philo	t_philo;
 typedef struct forks	t_forks;
-typedef struct status	t_status;
 
 typedef struct data{
 	unsigned int	no_of_philosophers;
@@ -32,14 +31,18 @@ typedef struct data{
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
 	unsigned int	times_philo_must_eat;
+	unsigned int	ate_enough;
 	long long		start_time;
 	struct timeval	tv;
 	pthread_mutex_t	writing;
-	pthread_mutex_t	check_if_can_eat;
 	pthread_mutex_t	check_eat_count;
+	pthread_mutex_t	die_mutex;
+	pthread_mutex_t	all_ate_mutex;
+	pthread_mutex_t	*forks;
 	pthread_t		*th;
 	t_philo			*philo;
-	t_status		*status;
+	bool			someone_died;
+	bool			all_ate;
 }			t_data;
 
 typedef struct philo{
@@ -47,35 +50,29 @@ typedef struct philo{
 	long long		last_time_eaten;
 	long long		start;
 	unsigned int	times_eaten;
-	bool			is_eating;
-	t_data			*data;
-	pthread_mutex_t	*fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
+	t_data			*data;
 }					t_philo;
-
-typedef struct status{
-	unsigned int	has_eaten_enough;
-	bool			all_ate;
-	bool			someone_died;
-}			t_status;
 
 //MAIN
 int			main(int argc, char **argv);
 
 //CHECK
 int			arg_check(int argc, char **argv);
+bool		died(t_data *data);
+bool		all_ate(t_data *data);
 
 //PARSE
 int			parse_all(t_data *data, char **argv);
 int			parse_data(t_data *data, char **argv);
 void		parse_correct_arguments(t_data *data, int ms, int i);
 int			parse_philo(t_data *data);
-void		connect_forks(t_data *data);
+int			parse_forks(t_data *data);
 
 //UTILS
 int			ft_atoi_data(const char *str);
-void		print_msg(t_philo *philo, long long ms, char *msg, bool died);
+void		print_msg(t_philo *philo, long long ms, char *msg, bool is_dead);
 
 //THREADS
 int			create_and_join_threads(t_data *data);
@@ -84,9 +81,9 @@ int			one_philo_thread(t_data *data);
 //ROUTINE
 void		*cycles(void *param);
 int			philo_eat(t_philo *philo);
-void		unlock_mutexes(t_philo *philo);
-void		philo_sleep(t_philo *philo);
-void		philo_think(t_philo *philo);
+void		drop_forks(t_philo *philo);
+void		check_eat_count(t_philo *philo);
+void		philo_sleep_and_think(t_philo *philo);
 
 //TIME
 void		set_start_time(t_data *data);
@@ -94,14 +91,16 @@ long long	get_time(t_data *data);
 void		acc_usleep(t_data *data, long long ms);
 
 //CLEANUP
-int			free_specific(t_data *data, int err);
+void		free_specific(t_data *data);
 void		cleanup(t_data *data);
 
 //ONE PHILO
 void		*one_philo_cycle(void *param);
 int			one_philo_eat(t_philo *philo);
-void		one_philo_sleep(t_philo *philo);
-void		one_philo_think(t_philo *philo);
+void		one_philo_sleep_and_think(t_philo *philo);
+
+//MONITORING
+void		monitoring(t_data *data);
 
 #endif
 

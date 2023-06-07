@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:58:48 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/06 17:52:09 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/07 17:32:43 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	parse_data(t_data *data, char **argv)
 		parse_correct_arguments(data, ms, i);
 		i++;
 	}
+	data->ate_enough = 0;
 	pthread_mutex_init(&data->writing, NULL);
 	pthread_mutex_init(&data->check_eat_count, NULL);
 	pthread_mutex_init(&data->die_mutex, NULL);
@@ -61,7 +62,7 @@ int	parse_philo(t_data *data)
 	no = data->no_of_philosophers;
 	data->th = malloc(no * sizeof(pthread_t));
 	data->philo = malloc(no * sizeof(t_philo));
-	if (pthread_mutex_init(&data->writing, NULL) || !data->th || !data->philo)
+	if (!data->th || !data->philo)
 		return (1);
 	while (i < no)
 	{
@@ -74,7 +75,7 @@ int	parse_philo(t_data *data)
 	return (0);
 }
 
-void	parse_forks(t_data *data)
+int	parse_forks(t_data *data)
 {
 	int	i;
 	int	no;
@@ -83,9 +84,9 @@ void	parse_forks(t_data *data)
 	no = data->no_of_philosophers;
 	data->forks = malloc(sizeof(pthread_mutex_t) * no);
 	if (!data->forks)
-		return ;
+		return (1);
 	if (no == 1)
-		return ;
+		return (0);
 	while (i < no)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
@@ -93,17 +94,19 @@ void	parse_forks(t_data *data)
 		data->philo[i].r_fork = &data->forks[(i + 1) % no];
 		i++;
 	}
+	return (0);
 }
 
 int	parse_all(t_data *data, char **argv)
 {
-	int	error;
-
 	if (parse_data(data, argv))
 		return (1);
-	error = parse_philo(data);
-	if (error)
-		return (free_specific(data, error));
-	parse_forks(data);
+	if (parse_philo(data))
+	{
+		free_specific(data);
+		return (1);
+	}
+	if (parse_forks(data))
+		return (1);
 	return (0);
 }

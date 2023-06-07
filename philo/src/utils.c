@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 13:22:26 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/06 18:08:11 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/07 16:27:52 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ int	ft_atoi_data(const char *str)
 	return (out);
 }
 
-void	print_msg(t_philo *philo, long long ms, char *msg, bool died)
+void	print_msg(t_philo *philo, long long ms, char *msg, bool is_dead)
 {
 	pthread_mutex_lock(&philo->data->writing);
-	if (died == false && check_if_died(philo->data) == false)
+	if (is_dead == false && died(philo->data) == false)
 		printf("%lld %d %s\n", ms, philo->philo_no, msg);
-	else if (check_if_died(philo->data) == false)
+	else if (died(philo->data) == false)
 	{
 		philo->data->someone_died = true;
 		printf("%lld %d %s\n", ms, philo->philo_no, msg);

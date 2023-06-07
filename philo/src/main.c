@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:44:22 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/06 14:55:06 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/07 17:32:18 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // void	ft_leaks()
 // {
-// 	system("leaks -s philo");
+// 	system("leaks philo");
 // }
 
 int	main(int argc, char **argv)
