@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:48:35 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/07 16:27:38 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/12 15:32:34 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct data{
 typedef struct philo{
 	int				philo_no;
 	long long		last_time_eaten;
-	long long		start;
 	unsigned int	times_eaten;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
@@ -75,11 +74,14 @@ int			ft_atoi_data(const char *str);
 void		print_msg(t_philo *philo, long long ms, char *msg, bool is_dead);
 
 //THREADS
-int			create_and_join_threads(t_data *data);
+int			create_threads(t_data *data);
+int			join_threads(t_data *data);
 int			one_philo_thread(t_data *data);
+int			detach_threads(t_data *data, unsigned int all_threads);
+void		*dead_thread_fail(t_data *data);
 
 //ROUTINE
-void		*cycles(void *param);
+void		*cycle(void *param);
 int			philo_eat(t_philo *philo);
 void		drop_forks(t_philo *philo);
 void		check_eat_count(t_philo *philo);
@@ -93,14 +95,15 @@ void		acc_usleep(t_data *data, long long ms);
 //CLEANUP
 void		free_specific(t_data *data);
 void		cleanup(t_data *data);
+int			destroy_specific(t_data *data, int i);
+int			destroy_specific_forks(t_data *data, int no_of_mutexes);
 
 //ONE PHILO
 void		*one_philo_cycle(void *param);
-int			one_philo_eat(t_philo *philo);
-void		one_philo_sleep_and_think(t_philo *philo);
 
 //MONITORING
 void		monitoring(t_data *data);
+void		*dead_thread(void *param);
 
 #endif
 

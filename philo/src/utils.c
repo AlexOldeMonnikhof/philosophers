@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 13:22:26 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/07 16:27:52 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/08 18:57:53 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ void	print_msg(t_philo *philo, long long ms, char *msg, bool is_dead)
 		printf("%lld %d %s\n", ms, philo->philo_no, msg);
 	else if (died(philo->data) == false)
 	{
+		pthread_mutex_lock(&philo->data->die_mutex);
 		philo->data->someone_died = true;
+		pthread_mutex_unlock(&philo->data->die_mutex);
 		printf("%lld %d %s\n", ms, philo->philo_no, msg);
 	}
 	pthread_mutex_unlock(&philo->data->writing);

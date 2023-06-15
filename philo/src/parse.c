@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:58:48 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/07 17:32:43 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/08 18:58:04 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,15 @@ int	parse_data(t_data *data, char **argv)
 		parse_correct_arguments(data, ms, i);
 		i++;
 	}
+	if (pthread_mutex_init(&data->writing, NULL))
+		return (destroy_specific(data, 0));
+	if (pthread_mutex_init(&data->check_eat_count, NULL))
+		return (destroy_specific(data, 1));
+	if (pthread_mutex_init(&data->die_mutex, NULL))
+		return (destroy_specific(data, 2));
+	if (pthread_mutex_init(&data->all_ate_mutex, NULL))
+		return (destroy_specific(data, 3));
 	data->ate_enough = 0;
-	pthread_mutex_init(&data->writing, NULL);
-	pthread_mutex_init(&data->check_eat_count, NULL);
-	pthread_mutex_init(&data->die_mutex, NULL);
-	pthread_mutex_init(&data->all_ate_mutex, NULL);
 	data->someone_died = false;
 	data->all_ate = false;
 	return (0);
@@ -55,8 +59,8 @@ int	parse_data(t_data *data, char **argv)
 
 int	parse_philo(t_data *data)
 {
-	int		i;
-	int		no;
+	unsigned int	i;
+	unsigned int	no;
 
 	i = 0;
 	no = data->no_of_philosophers;
@@ -77,8 +81,8 @@ int	parse_philo(t_data *data)
 
 int	parse_forks(t_data *data)
 {
-	int	i;
-	int	no;
+	unsigned int	i;
+	unsigned int	no;
 
 	i = 0;
 	no = data->no_of_philosophers;
@@ -86,10 +90,15 @@ int	parse_forks(t_data *data)
 	if (!data->forks)
 		return (1);
 	if (no == 1)
+	{
+		if (pthread_mutex_init(&data->forks[i], NULL))
+			return (destroy_specific(data, 3));
 		return (0);
+	}
 	while (i < no)
 	{
-		pthread_mutex_init(&data->forks[i], NULL);
+		if (pthread_mutex_init(&data->forks[i], NULL))
+			return (destroy_specific_forks(data, i));
 		data->philo[i].l_fork = &data->forks[i];
 		data->philo[i].r_fork = &data->forks[(i + 1) % no];
 		i++;
@@ -107,6 +116,9 @@ int	parse_all(t_data *data, char **argv)
 		return (1);
 	}
 	if (parse_forks(data))
+	{
+		free_specific(data);
 		return (1);
+	}
 	return (0);
 }

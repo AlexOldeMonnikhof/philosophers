@@ -6,7 +6,7 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 14:31:51 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/07 16:41:34 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/12 18:04:36 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,19 @@ void	monitoring(t_data *data)
 			i++;
 		}
 	}
+}
+
+void	*dead_thread(void *param)
+{
+	t_philo		*philo;
+	t_data		*data;
+
+	philo = param;
+	data = philo->data;
+	acc_usleep(data, data->time_to_die);
+	pthread_mutex_lock(&philo->data->check_eat_count);
+	if (!philo->times_eaten)
+		print_msg(philo, get_time(data), "died", true);
+	pthread_mutex_unlock(&philo->data->check_eat_count);
+	return (NULL);
 }

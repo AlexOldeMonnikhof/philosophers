@@ -6,13 +6,13 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:35:56 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/07 15:24:44 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/12 18:41:17 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int	create_and_join_threads(t_data *data)
+int	create_threads(t_data *data)
 {
 	unsigned int	i;
 	t_philo			*philo;
@@ -24,13 +24,22 @@ int	create_and_join_threads(t_data *data)
 		return (one_philo_thread(data));
 	while (i < data->no_of_philosophers)
 	{
-		if (pthread_create(&data->th[i], NULL, &cycles, (void *)&philo[i]))
-			return (1);
+		if (pthread_create(&data->th[i], NULL, &cycle, (void *)&data->philo[i]))
+			break ;
 		i++;
 	}
-	i = 0;
+	if (i != data->no_of_philosophers)
+		return (detach_threads(data, i));
 	if (data->times_philo_must_eat > 0)
 		monitoring(data);
+	return (join_threads(data));
+}
+
+int	join_threads(t_data *data)
+{
+	unsigned int	i;
+
+	i = 0;
 	while (i < data->no_of_philosophers)
 	{
 		if (pthread_join(data->th[i], NULL))
@@ -50,4 +59,23 @@ int	one_philo_thread(t_data *data)
 	if (pthread_join(data->th[0], NULL))
 		return (1);
 	return (0);
+}
+
+int	detach_threads(t_data *data, unsigned int all_threads)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < all_threads)
+		pthread_detach(data->th[i++]);
+	return (1);
+}
+
+void	*dead_thread_fail(t_data *data)
+{
+	pthread_mutex_lock(&data->die_mutex);
+	data->someone_died = true;
+	printf("thread to check time_to_die failed\n");
+	pthread_mutex_unlock(&data->die_mutex);
+	return (NULL);
 }

@@ -6,13 +6,13 @@
 /*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:44:22 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/07 17:32:18 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/06/12 18:42:25 by aolde-mo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-// void	ft_leaks()
+// void	asd()
 // {
 // 	system("leaks philo");
 // }
@@ -31,7 +31,7 @@ int	main(int argc, char **argv)
 		printf("invalid argument(s) or malloc error\n");
 		return (1);
 	}
-	if (create_and_join_threads(&data))
+	if (create_threads(&data))
 	{
 		printf("error while creating or joining thread(s)\n");
 		cleanup(&data);
@@ -40,5 +40,3 @@ int	main(int argc, char **argv)
 	cleanup(&data);
 	return (0);
 }
-
-// atexit(ft_leaks);
