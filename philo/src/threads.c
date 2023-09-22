@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:35:56 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/12 18:41:17 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/09/22 14:28:17 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 int	create_threads(t_data *data)
 {
 	unsigned int	i;
-	t_philo			*philo;
 
 	i = 0;
-	philo = data->philo;
 	set_start_time(data);
 	if (data->no_of_philosophers == 1)
 		return (one_philo_thread(data));

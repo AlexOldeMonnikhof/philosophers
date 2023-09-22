@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aolde-mo <aolde-mo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 12:44:22 by aolde-mo          #+#    #+#             */
-/*   Updated: 2023/06/12 18:42:25 by aolde-mo         ###   ########.fr       */
+/*   Updated: 2023/09/22 14:28:59 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-// void	asd()
-// {
-// 	system("leaks philo");
-// }
 
 int	main(int argc, char **argv)
 {
